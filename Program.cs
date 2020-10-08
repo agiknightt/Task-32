@@ -121,7 +121,7 @@ namespace Task_32
             _directionWhere = "Нет направления";
         }
     }
-    class TrainCar : Train
+    class TrainCar
     {
         private int _places;
         public TrainCar()
