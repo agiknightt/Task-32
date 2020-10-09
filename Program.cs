@@ -7,15 +7,16 @@ namespace Task_32
     {
         static void Main(string[] args)
         {
+            Random rand = new Random();
             bool isExit = true;
-            Train train = new Train();
+            int passengers = rand.Next(1, 100);
 
+            Train train = new Train();
             Direction direction = new Direction();
-            Passenger passengers = new Passenger();
-            train.CreateTrainCars(passengers.Passengers);
+
+            train.CreateTrainCars(passengers);            
 
             Console.Clear();
-
             
             while (isExit)
             {
@@ -27,11 +28,12 @@ namespace Task_32
                 {
                     case 1:
                         direction = new Direction();
-                        passengers = new Passenger();
-                        train.CreateTrainCars(passengers.Passengers);
+                        passengers = rand.Next(1, 100);
+                        train.CreateTrainCars(passengers);
                         break;
                     case 2:
-                        train.SendTrain(direction, passengers);
+                        train.SendTrain(direction);
+                        passengers = 0;
                         break;
                     case 3:
                         isExit = false;
@@ -46,20 +48,20 @@ namespace Task_32
     
     class Train
     {
-        public void ShowInfo(Direction direction, Passenger passenger)
+        public void ShowInfo(Direction direction, int passengers)
         {
-            Console.WriteLine(passenger.Passengers + " пассажиров купили билеты на это направление поезда\n");
+            Console.WriteLine(passengers + " пассажиров купили билеты на это направление поезда\n");
             Console.SetCursorPosition(0, 2);
             Console.WriteLine($"Поезд {direction.DirectionFromWhere} - {direction.DirectionWhere} ");
             Console.SetCursorPosition(10, 0);            
         }
         
-        public void SendTrain(Direction direction, Passenger passenger)
+        public void SendTrain(Direction direction)
         {
             Console.WriteLine($"Поезд отправляется {direction.DirectionWhere}");
-            direction.TakeAwayDirection();
-            passenger.TakeAwayPassengers();
-        }        
+            direction.Reset();
+        }
+        
         public void CreateTrainCars(int passengers)
         {
             int freePlaces = passengers;
@@ -68,27 +70,7 @@ namespace Task_32
                 TrainCar trainCar = new TrainCar();
                 trainCar.FillPassengers(ref freePlaces);
             }
-        }
-    }
-    class Passenger
-    {
-        private int _passengers;
-        public int Passengers
-        {
-            get
-            {
-                return _passengers;
-            }
-        }
-        public Passenger()
-        {
-            Random rand = new Random();
-            _passengers = rand.Next(1, 100);
-        }
-        public void TakeAwayPassengers()
-        {
-            _passengers = 0;
-        }
+        }        
     }
     class Direction 
     {
@@ -115,7 +97,7 @@ namespace Task_32
             Console.Write("Куда отправляется поезд ? : ");
             _directionWhere = Console.ReadLine();
         }
-        public void TakeAwayDirection()
+        public void Reset()
         {
             _directionFromWhere = "Нет направления";
             _directionWhere = "Нет направления";
@@ -136,8 +118,6 @@ namespace Task_32
                 passengers -= _places;                
             }               
             return passengers;
-        }
-        
-    }
-    
+        }        
+    }    
 }
